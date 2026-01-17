@@ -35,15 +35,11 @@
 
 ## 数据集
 
-### 图像级数据集
-
 | 数据集名称 | 年份 | 描述 | 规模 | 特点 |
 |-----------|------|------|------|------|
 | **[Celeb-DF](https://github.com/yuezunli/celeb-deepfakeforensics)** | 2019 | 高质量换脸数据集 | 590个真实视频，5,639个伪造视频 | 高质量伪造，检测难度大，从YouTube收集名人视频 |
 | **[FaceForensics++](https://github.com/ondyari/FaceForensics)** | 2019 | 多种伪造方法数据集 | 1,000个真实视频，约5,000个伪造视频 | 包含多种伪造技术（DeepFakes, Face2Face, FaceSwap, NeuralTextures等），多种压缩质量版本 |
 | **[WildDeepfake](https://github.com/OpenTAI/wild-deepfake)** | 2021 | 真实场景数据集 | 707个视频，提取7,314个面部序列 | 从互联网收集，更接近真实应用场景，场景和人物多样性高 |
-
-### 视频级数据集
 
 | 数据集名称 | 年份 | 描述 | 规模 | 特点 |
 |-----------|------|------|------|------|
@@ -93,9 +89,9 @@
 
 基于空间域的检测方法主要关注图像像素级别的特征，通过分析图像的空间分布、纹理、边缘等特征来识别伪造痕迹。
 
-**代表性工作：**(参考论文Table 1)
+**代表性工作：**(见论文Table 1)
 
-| 方法 | 数据集 | AUC检测结果(%) | 跨数据集/跨库AUC(%) | 文章链接 |
+| 方法 | 数据集 | AUC检测结果(%) | 跨数据集AUC(%) | 文章链接 |
 |------|--------|---------------|-------------------|---------|
 | **Matern et al** | FaceForensics | 86.60 | — | [paper](https://ieeexplore.ieee.org/document/8638330) |
 | **Zhou et al** | 自建库 | 92.70 | 自建库: 85.40 | [paper](https://ieeexplore.ieee.org/document/8014963) |
@@ -119,14 +115,19 @@
 
 基于频率域的检测方法通过分析图像的频域特征来识别伪造痕迹，因为生成模型在频域会留下特定的伪影。
 
-**代表性工作：**
+**代表性工作：**(见论文Table 2)
 
-| 方法 | 核心思想 | 优点 | 局限性 |
-|------|---------|------|--------|
-| **Frequency Domain Analysis** | 直接分析频域特征 | 能捕捉频域伪影 | 对压缩敏感 |
-| **Spatial-Frequency Fusion** | 空间域和频域特征融合 | 结合两种特征优势 | 计算成本高 |
-| **Knowledge Distillation in Frequency Domain** | 频域知识蒸馏 | 提升跨数据集泛化 | 训练过程复杂 |
-| **F3-Net** | 频率感知的伪造检测 | 对频域特征敏感 | 需要大量计算资源 |
+| 方法 | 数据集 | AUC检测结果(%) | 跨数据集AUC(%) | 文章链接 |
+|------|---------|------|--------|------|
+| **Li et al** | FaceForensics++ | 93.40 | Celeb-DF: 79.30 | [paper](https://arxiv.org/abs/2103.09096) |
+| **Frank et al** | CelebA | 99.91(ACC) | — | [paper](https://arxiv.org/abs/2003.08685) |
+| **F3-Net** | FaceForensics++ | 98.10 | Celeb-DF: 65.17 | [paper](https://arxiv.org/abs/2007.09355) |
+| **PEL** | FaceForensics++ | 97.63 | Celeb-DF: 69.18 | [paper](https://arxiv.org/abs/2112.13977) |
+| **M2TR** | FaceForensics++ | 99.51 | Celeb-DF: 68.20 | [paper](https://arxiv.org/abs/2104.09770) |
+| **MPSM** | FaceForensics++ | 99.46 | DFDC: 76.53 | [paper](https://arxiv.org/abs/2105.02577) |
+| **papa et al** | 自建库 | 100(ACC) | — | [paper](https://ieeexplore.ieee.org/document/10156981/) |
+| **Liu et al** | DiffusionForensics | 100 | DiffusionDB: 73.21 | [paper](https://ieeexplore.ieee.org/document/10608232) |
+| **D4** | 自建库 | 93.00(ACC) | — | [paper](https://arxiv.org/abs/2202.05687) |
 
 **发展趋势：**空间域和频域特征的有效融合，针对不同生成模型的频域特征分析，压缩鲁棒性提升
 
@@ -138,14 +139,16 @@
 
 视频级检测方法利用时间信息，通过分析帧间的不一致性来识别伪造。
 
-**代表性工作：**
+**代表性工作：**(见论文Table 3)
 
-| 方法 | 核心思想 | 优点 | 局限性 |
-|------|---------|------|--------|
-| **Temporal Coherence Analysis** | 时序一致性分析 | 能捕捉时序异常 | 对静态伪造效果有限 |
-| **Spatiotemporal Dropout Transformer** | 时空dropout机制 | 提升泛化能力 | 需要大量训练数据 |
-| **Thumbnail Layout Learning** | 缩略图布局学习 | 能捕捉时空不一致 | 对视频长度敏感 |
-| **Unsupervised Inconsistency-aware ViT** | 无监督不一致性检测 | 无需大量标注数据 | 检测精度可能较低 |
+| 方法 | 数据集 | AUC检测结果(%) | 跨数据集AUC(%) | 文章链接 |
+|------|---------|------|--------|------|
+| **Sabir et al** | FaceForensics++ | 99.60 | — | [paper](https://arxiv.org/abs/1905.00582) |
+| **FSSpotter** | FaceForensics++ | 100 | Celeb-DF: 76.26 | [paper](https://ieeexplore.ieee.org/document/9102914/) |
+| **Zheng et al** | FaceForensics++ | 99.70 | Celeb-DF: 86.90 | [paper](https://arxiv.org/abs/2108.06693) |
+| **Gu et al** | FaceForensics++ | 98.93 | Celeb-DF: 77.65 | [paper](https://ojs.aaai.org/index.php/AAAI/article/view/19955) |
+| **STDT** | FaceForensics++ | 99.80 | Celeb-DF: 69.78 | [paper](https://arxiv.org/abs/2207.06612) |
+| **TALL-Swin** | FaceForensics++ | 99.87 | Celeb-DF: 90.79 | [paper](https://arxiv.org/abs/2403.10261) |
 
 **发展趋势：**从单帧检测到多帧时序分析，从监督学习到无监督/自监督学习，从全局时序到局部时序不一致性检测
 
@@ -153,14 +156,14 @@
 
 利用人脸生物特征（如眨眼、心率、血流、瞳孔反应等）来检测伪造，因为这些特征在伪造视频中往往不自然。
 
-**代表性工作：**
+**代表性工作：**(见论文Table 4)
 
-| 方法 | 核心思想 | 优点 | 局限性 |
-|------|---------|------|--------|
-| **Blink Detection** | 眨眼频率和模式分析 | 对换脸伪造有效 | 对高质量伪造效果有限 |
-| **Physiological Signal Analysis** | 生理信号（心率、血流）分析 | 难以伪造 | 需要高质量视频 |
-| **Pupil Response Detection** | 瞳孔反应检测 | 生物特征难以模仿 | 对视频质量要求高 |
-| **Joint Spoofing and Forgery Detection** | 联合活体检测和伪造检测 | 综合多种生物特征 | 计算复杂度高 |
+| 方法 | 数据集 | AUC检测结果(%) | 跨数据集AUC(%) | 文章链接 |
+|------|---------|------|--------|------|
+| **Ciftci et al** | FaceForensics++ | 91.07(ACC) | Celeb-DF: 86.48(ACC) | [paper](https://arxiv.org/abs/1901.02212) |
+| **DeepFakesON-Phys** | DFDC | 98.20 | — | [paper](https://arxiv.org/abs/2010.00400) |
+| **Mao and Yang** | FaceForensics++ | 96.13(ACC) | Celeb-DF: 86.57(ACC) | [paper](https://arxiv.org/abs/2110.15561) |
+| **Saif et al** | FaceForensics++ | 99.00(AUC) | Celeb-DF: 95.00 | [paper](https://ideas.repec.org/a/eee/tefoso/v205y2024ics0040162524002671.html) |
 
 **发展趋势：**多生物特征融合，低质量视频下的生物特征提取，实时生物特征检测
 
@@ -168,15 +171,16 @@
 
 利用音频、视频等多种模态信息（音视频同步性、唇动与音频一致性、融合多模态特征）进行联合检测，通过分析模态间的一致性来识别伪造。
 
-**代表性工作：**
+**代表性工作：**(见论文Table 5)
 
-| 方法 | 核心思想 | 优点 | 局限性 |
-|------|---------|------|--------|
-| **AVoiD-DF** | 音视频联合学习 | 多模态信息互补 | 对单模态伪造无效 |
-| **Audio-Visual Synchronization** | 音视频同步分析 | 能检测同步异常 | 对异步场景敏感 |
-| **Cross-Modality Regularization** | 跨模态正则化 | 提升模态融合效果 | 训练过程复杂 |
-| **Fine-grained Multimodal Classification** | 细粒度多模态分类 | 能区分多种伪造类型 | 需要多模态标注数据 |
-| **DiMoDif** | 话语模态信息区分 | 局部帧级不一致性检测 | 能定位伪造时间段 |
+| 方法 | 数据集 | AUC检测结果(%) | 跨数据集AUC(%) | 文章链接 |
+|------|---------|------|--------|------|
+| **Cai et al** | LAV-DF | 99.00 | — | [paper](https://arxiv.org/abs/2204.06228) |
+| **Shahzad et al** | FakeAVCeleb | 94.00(ACC) | — | [paper](https://ieeexplore.ieee.org/document/9980296/) |
+| **AVoiD-DF** | FakeAVCeleb | 89.20 | DFDC: 80.60 | [paper](https://ieeexplore.ieee.org/document/10081373/) |
+| **AVFF** | FakeAVCeleb | 99.10 | DFDC: 86.20 | [paper](https://arxiv.org/abs/2406.02951) |
+| **Yin et al** | FakeAVCeleb | 99.97 | LAV-DF: 63.80 | [paper](https://link.springer.com/article/10.1007/s11263-024-02128-1) |
+| **Song et al** | 自建库 | 95.70 | — | [paper](https://arxiv.org/abs/2410.23623) |
 
 **发展趋势：**跨模态特征的有效融合，对异步场景的鲁棒性提升，局部多模态伪造检测和定位，自监督多模态学习
 
@@ -186,19 +190,26 @@
 
 随着文本生成图像/视频技术的流行（如DALL-E、Stable Diffusion、Runway等），针对这类生成内容的检测方法也逐渐发展。检测思路有：分析扩散模型生成图像的特定痕迹、检测文本生成内容的特征模式、识别生成式AI的指纹特征
 
-**代表性工作：**
+**代表性工作：**(混杂在上面提到的这些论文中)
 
-| 方法 | 核心思想 | 特点 |
-|------|---------|------|
-| **Diffusion Model Detection** | 检测扩散模型生成痕迹 | 针对Stable Diffusion等模型 |
-| **Text-to-Image Detection** | 文本生成图像检测 | 检测DALL-E等生成图像 |
-| **Text-to-Video Detection** | 文本生成视频检测 | 检测Runway、Pika等生成视频 |
+| 方法 | 核心思想 | 特点 |  |  |
+|------|---------|------|------|------|
+| **Aghasanli et al** | 自建库             | 99.70(ACC) | 自建库: 84(ACC)    | [paper](https://ieeexplore.ieee.org/document/10350382) |
+| **multiLID**        | 自建库             | 100(ACC)   | —                  | [paper](https://arxiv.org/abs/2307.02347) |
+| **Cheng et al**     | DiFF               | 99.99(ACC) | — | [paper](https://arxiv.org/abs/2401.15859) |
+| **Amoroso et al** | 自建库 | 99.68 | 自建库: 99.68 | [paper](https://arxiv.org/abs/2304.00500) |
+| **papa et al** | 自建库 | 100(ACC) | — | [paper](https://ieeexplore.ieee.org/document/10156981/) |
+| **Liu et al** | DiffusionForensics | 100 | DiffusionDB: 73.21 | [paper](https://ieeexplore.ieee.org/document/10608232) |
+| **D4** | 自建库 | 93.00(ACC) | — | [paper](https://arxiv.org/abs/2202.05687) |
+| **Song et al** | 自建库 | 95.70 | — | [paper](https://arxiv.org/abs/2410.23623) |
 
 **挑战：**扩散模型留下的痕迹更细微、不同生成模型的痕迹差异大、需要针对不同生成技术的专门检测方法
 
 ---
 
 ## 研究挑战与瓶颈
+
+以下挑战总结自大量论文，可参考文中的引用
 
 1. 泛化能力不足：不同生成方法留下的痕迹差异大；模型过度拟合特定数据集的特征；缺乏通用的伪造特征表示
 2. 真实环境下的鲁棒性：伪造痕迹在压缩后可能被削弱；模型在高质量数据上训练，对低质量数据泛化差；缺乏真实场景的多样化训练数据
@@ -209,6 +220,8 @@
 ---
 
 ## 未来研究方向
+
+以下研究方向总结自大量论文，可参考文中的引用
 
 1. 通用化检测方法：学习通用的伪造特征表示，提升跨数据集和跨方法的泛化能力
 2. 鲁棒性提升：空间域和频域特征的有效融合；知识蒸馏提升泛化能力；在多样化真实场景数据上训练
