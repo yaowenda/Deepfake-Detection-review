@@ -1,235 +1,244 @@
-# Deepfake Detection review
+# Deepfake Detection Review
 
-> 本文档基于我们的综述论文《[人脸深度伪造检测方法研究综述](https://www.cjig.cn/zh/article/doi/10.11834/jig.240586/)》整理而成。
+[Chinese Version](README_CN)
+
+> This document is organized based on our survey paper "Review of research on face deepfake detection methods" (https://www.cjig.cn/zh/article/doi/10.11834/jig.240586/).
 > 
-> **论文发表信息：**
+> **Publication information:**
 > 
-> - 期刊：《中国图象图形学报》(Journal of Image and Graphics)
-> - 发表地址：https://www.cjig.cn/zh/article/doi/10.11834/jig.240586/
+> - Journal: Journal of Image and Graphics
+> - Publication URL: https://www.cjig.cn/zh/article/doi/10.11834/jig.240586/
 > - DOI: 10.11834/jig.240586
 > 
-> **文档说明：**
-> - 本文档总结了深度伪造检测领域的主要方法、数据集和评价指标
-> - 内容截止至 **2025年1月**，该领域发展迅速，欢迎有志者合作更新此仓库
-> - 作者邮箱：1046748784@qq.com
+> **Documentation notes:**
+> 
+> - This document summarizes the main methods, datasets and evaluation metrics in the field of deepfake detection
+> - Content up to **January 2025**; the field evolves rapidly, volunteers are welcome to contribute updates to this repository
+> - Author email: 1046748784@qq.com
+>
+---
+
+![deepfake](assets/deepfake.jpeg)
+
+## 📚 Table of Contents
+
+- [Datasets](#datasets)
+- [Evaluation Metrics](#evaluation-metrics)
+- [Detection Method Taxonomy](#detection-method-taxonomy)
+-   - [Image-level Detection Methods](#image-level-detection-methods)
+-     - [Spatial-domain based detection methods](#spatial-domain-based-detection-methods)
+-     - [Frequency-domain based detection methods](#frequency-domain-based-detection-methods)
+-   - [Video-level Detection Methods](#video-level-detection-methods)
+-     - [Spatio-temporal inconsistency based detection methods](#spatio-temporal-inconsistency-based-detection-methods)
+-     - [Biometric-based detection methods](#biometric-based-detection-methods)
+-     - [Multimodal-based detection methods](#multimodal-based-detection-methods)
+-   - [Text-to-Image/Video Generation Detection Methods](#text-to-imagevideo-generation-detection-methods)
+- - [Research Challenges and Bottlenecks](#research-challenges-and-bottlenecks)
+- - [Future Research Directions](#future-research-directions)
 
 ---
 
-## 📚 目录
+## Datasets
 
-- [数据集](#数据集)
-- [评价指标](#评价指标)
-- [检测方法分类](#检测方法分类)
-  - [图像级检测方法](#图像级检测方法)
-    - [基于空间域的检测方法](#基于空间域的检测方法)
-    - [基于频率域的检测方法](#基于频率域的检测方法)
-  - [视频级检测方法](#视频级检测方法)
-    - [基于时空不一致的检测方法](#基于时空不一致的检测方法)
-    - [基于生物特征的检测方法](#基于生物特征的检测方法)
-    - [基于多模态的检测方法](#基于多模态的检测方法)
-  - [文本生成图像/视频检测方法](#文本生成图像视频检测方法)
-- [研究挑战与瓶颈](#研究挑战与瓶颈)
-- [未来研究方向](#未来研究方向)
+| Dataset Name | Year | Description | Size | Features |
+|-------------|------|-------------|------|---------|
+| **Celeb-DF** (https://github.com/yuezunli/celeb-deepfakeforensics) | 2019 | High-quality face-swapping dataset | 590 real videos, 5,639 forged videos | High-quality forgeries; difficult to detect, collected from YouTube celebrity videos |
+| **FaceForensics++** (https://github.com/ondyari/FaceForensics) | 2019 | Dataset with multiple forgery methods | 1,000 real videos, ~5,000 forged videos | Includes multiple forgery techniques (DeepFakes, Face2Face, FaceSwap, NeuralTextures, etc.); multiple compression quality versions |
+| **WildDeepfake** (https://github.com/OpenTAI/wild-deepfake) | 2021 | Real-world like dataset | 707 videos, 7,314 face sequences | Collected from the internet; closer to real-world applications; high scene and person diversity |
 
----
+| Dataset Name | Year | Description | Size | Features |
+|-------------|------|-------------|------|---------|
+| **DFDC (Deepfake Detection Challenge)** (https://ai.facebook.com/datasets/dfdc) | 2020 | Large-scale dataset released by Facebook | ~23,564 real video clips, 104,500 forged video clips | Contains multiple forgery methods and real scenes; shot by 3,426 actors; total video clips > 100k |
+| **DeeperForensics-1.0** (https://github.com/EndlessSora/DeeperForensics-1.0) | 2020 | Large-scale real-world face forgery detection benchmark | 48,475 real videos, 11,000 forged videos, total ~60,000 videos, ~17.6 million frames | Includes real perturbations, face-swapping methods; includes hidden test set |
+| **FakeAVCeleb** (https://github.com/DashyantSingh/FakeAVCeleb) | 2021 | Audio-visual deepfake dataset | 500 real videos, 19,500 forged video/audio-video pairs | Includes audio and video forgery; supports multimodal detection; audio-video synchronization analysis |
+| **AV-Deepfake1M** (https://arxiv.org/abs/2311.15308) | 2023 | Large-scale audio-video dataset | 286,721 real videos, 860,039 forged videos | Large-scale, diverse; supports audio-video joint detection; total samples > 1M |
+| **LAV-DF** (https://github.com/ControlNet/LAV-DF) | 2023 | Localized audio-video forgery dataset | - | Supports localized forgery detection and localization; fine-grained multimodal classification |
 
-## 数据集
+### Text-to-Image/Video Datasets
 
-| 数据集名称 | 年份 | 描述 | 规模 | 特点 |
-|-----------|------|------|------|------|
-| **[Celeb-DF](https://github.com/yuezunli/celeb-deepfakeforensics)** | 2019 | 高质量换脸数据集 | 590个真实视频，5,639个伪造视频 | 高质量伪造，检测难度大，从YouTube收集名人视频 |
-| **[FaceForensics++](https://github.com/ondyari/FaceForensics)** | 2019 | 多种伪造方法数据集 | 1,000个真实视频，约5,000个伪造视频 | 包含多种伪造技术（DeepFakes, Face2Face, FaceSwap, NeuralTextures等），多种压缩质量版本 |
-| **[WildDeepfake](https://github.com/OpenTAI/wild-deepfake)** | 2021 | 真实场景数据集 | 707个视频，提取7,314个面部序列 | 从互联网收集，更接近真实应用场景，场景和人物多样性高 |
-
-| 数据集名称 | 年份 | 描述 | 规模 | 特点 |
-|-----------|------|------|------|------|
-| **[DFDC (Deepfake Detection Challenge)](https://ai.facebook.com/datasets/dfdc)** | 2020 | Facebook发布的大规模数据集 | 约23,564个真实视频片段，104,500个伪造视频片段 | 包含多种伪造方法和真实场景，由3,426位演员拍摄，总视频片段超过100,000 |
-| **[DeeperForensics-1.0](https://github.com/EndlessSora/DeeperForensics-1.0)** | 2020 | 大规模真实场景人脸伪造检测基准 | 48,475个真实视频，11,000个伪造视频，共60,000个视频，约1,760万帧 | 包含真实扰动，face swapping方法生成，包含隐藏测试集 |
-| **[FakeAVCeleb](https://github.com/DashyantSingh/FakeAVCeleb)** | 2021 | 音视频联合伪造数据集 | 500个真实视频，19,500个伪造视频/音视频对 | 包含音频和视频伪造，支持多模态检测，音视频同步分析 |
-| **[AV-Deepfake1M](https://arxiv.org/abs/2311.15308)** | 2023 | 大规模音视频数据集 | 286,721个真实视频，860,039个伪造视频 | 大规模、多样性高，支持音视频联合检测，总样本超过100万 |
-| **[LAV-DF](https://github.com/ControlNet/LAV-DF)** | 2023 | 局部音频视频伪造数据集 | - | 支持局部伪造检测和定位，细粒度多模态分类 |
-
-### 文本生成图像/视频数据集
-
-| 数据集名称 | 年份 | 描述 | 规模 | 特点 |
-|-----------|------|------|------|------|
-| **[DiffusionDB](https://github.com/poloclub/diffusiondb)** | 2022 | 大规模文本到图像生成数据集 | 约14,000,000张生成图像（无真实图像） | 由Stable Diffusion生成，包含约180万个不同prompt和超参数设置，用于文本到图像生成研究 |
-| **[DiffusionForensics (DIRE)](https://github.com/ZhendongWang6/DIRE)** | 2023 | 扩散模型生成图像检测数据集 | 约40,000个真实图像，约40,000个生成图像 | 覆盖多个域（LSUN-Bedroom, ImageNet, CelebA-HQ等），包含多种diffusion模型生成的图像，用于通用AI生成图像检测 |
-| **[DiFF](https://github.com/xaCheng1996/DiFF)** | 2024 | 扩散模型人脸伪造数据集 | 超过500,000张生成图像，包含真实人脸图像 | 使用13种生成方法，在4种不同条件下生成，包含约30,000个prompts，专注于面部伪造检测 |
+| Dataset Name | Year | Description | Size | Features |
+|-------------|------|-------------|------|---------|
+| **DiffusionDB** (https://github.com/poloclub/diffusiondb) | 2022 | Large-scale text-to-image generation dataset | ~14,000,000 generated images (no real images) | Generated by Stable Diffusion; ~1.8 million prompts and hyperparameters; for text-to-image generation research |
+| **DiffusionForensics (DIRE)** (https://github.com/ZhendongWang6/DIRE) | 2023 | Diffusion-model generated image detection dataset | ~40,000 real images, ~40,000 generated images | Covers multiple domains (LSUN-Bedroom, ImageNet, CelebA-HQ, etc.); includes images generated by various diffusion models; for general AI-generated image detection |
+| **DiFF** (https://github.com/xaCheng1996/DiFF) | 2024 | Diffusion-model face forgery dataset | >500,000 generated images, includes real face images | Uses 13 generation methods under 4 conditions; ~30,000 prompts; focuses on face forgery detection |
 
 ---
 
-## 评价指标
+## Evaluation Metrics
 
-### 分类性能指标
+### Classification Performance Metrics
 
-- **准确率 (Accuracy)**: 正确分类的样本占总样本的比例
-- **精确率 (Precision)**: 预测为正例中真正为正例的比例
-- **召回率 (Recall)**: 真正例中被正确预测的比例
-- **F1分数 (F1-Score)**: 精确率和召回率的调和平均数
-- **AUC (Area Under Curve)**: ROC曲线下面积，衡量分类器整体性能
+- **Accuracy**: Proportion of correctly classified samples
+- **Precision**: Proportion of predicted positives that are truly positive
+- **Recall**: Proportion of true positives correctly identified
+- **F1 Score**: Harmonic mean of precision and recall
+- **AUC (Area Under the Curve)**: Area under the ROC curve; overall classifier performance
 
-### 定位性能指标
+### Localization Performance Metrics
 
-- **AP@阈值 (Average Precision)**: 在特定IoU阈值下的平均精确率
-- **mAP (mean Average Precision)**: 多个类别或阈值的平均AP值
+- **AP@IoU threshold**: Average precision at a specific IoU threshold
+- **mAP**: Mean average precision over multiple classes or thresholds
 
-### 泛化性能指标
+### Generalization Performance Metrics
 
-- **跨数据集准确率**: 在一个数据集上训练，在另一个数据集上测试的性能
-- **鲁棒性指标**: 对压缩、噪声、裁剪等攻击的抵抗能力
-
----
-
-## 检测方法分类
-
-### 图像级检测方法
-
-#### 基于空间域的检测方法
-
-基于空间域的检测方法主要关注图像像素级别的特征，通过分析图像的空间分布、纹理、边缘等特征来识别伪造痕迹。
-
-**代表性工作：**(见论文Table 1)
-
-| 方法 | 数据集 | AUC检测结果(%) | 跨数据集AUC(%) | 文章链接 |
-|------|--------|---------------|-------------------|---------|
-| **Matern et al** | FaceForensics | 86.60 | — | [paper](https://ieeexplore.ieee.org/document/8638330) |
-| **Zhou et al** | 自建库 | 92.70 | 自建库: 85.40 | [paper](https://ieeexplore.ieee.org/document/8014963) |
-| **Li and Lyu** | DeepfakeTIMIT | 93.20 | — | [paper](https://arxiv.org/abs/1811.00656) |
-| **Face X-ray** | FaceForensics++ | 98.52 | Celeb-DF: 80.58 | [paper](https://arxiv.org/abs/1912.13458) |
-| **MesoNet** | FaceForensics++ | 98.40(ACC) | — | [paper](https://arxiv.org/abs/1809.00888) |
-| **RFM** | Celeb-DF | 99.97 | — | [paper](https://arxiv.org/abs/2104.06609) |
-| **Muti-attention** | FaceForensics++ | 99.29 | Celeb-DF: 67.44 | [paper](https://arxiv.org/abs/2103.02406) |
-| **Wodajo et al** | DFDC | 99.90 | — | [paper](https://arxiv.org/abs/2307.07036) |
-| **Heo et al** | DFDC | 97.80(ACC) | — | [paper](https://link.springer.com/article/10.1007/s10489-022-03867-9) |
-| **Nguyen et al** | FaceForensics++ | 99.37 | Celeb-DF: 57.50 | [paper](https://arxiv.org/abs/1810.11215) |
-| **TAR** | FaceForensics++ | 99.80(ACC) | 自建库: 89.50 | [paper](https://arxiv.org/abs/2105.06117) |
-| **Aghasanli et al** | 自建库 | 99.70(ACC) | 自建库: 84(ACC) | [paper](https://ieeexplore.ieee.org/document/10350382) |
-| **multiLID** | 自建库 | 100(ACC) | — | [paper](https://arxiv.org/abs/2307.02347) |
-| **Cheng et al** | DiFF | 99.99(ACC) | — | [paper](https://arxiv.org/abs/2401.15859) |
-| **Amoroso et al** | 自建库 | 99.68 | 自建库: 99.68 | [paper](https://arxiv.org/abs/2304.00500) |
-
-**发展趋势：**从单一特征到多特征融合，从全局检测到局部定位，从监督学习到自监督/对比学习
-
-#### 基于频率域的检测方法
-
-基于频率域的检测方法通过分析图像的频域特征来识别伪造痕迹，因为生成模型在频域会留下特定的伪影。
-
-**代表性工作：**(见论文Table 2)
-
-| 方法 | 数据集 | AUC检测结果(%) | 跨数据集AUC(%) | 文章链接 |
-|------|---------|------|--------|------|
-| **Li et al** | FaceForensics++ | 93.40 | Celeb-DF: 79.30 | [paper](https://arxiv.org/abs/2103.09096) |
-| **Frank et al** | CelebA | 99.91(ACC) | — | [paper](https://arxiv.org/abs/2003.08685) |
-| **F3-Net** | FaceForensics++ | 98.10 | Celeb-DF: 65.17 | [paper](https://arxiv.org/abs/2007.09355) |
-| **PEL** | FaceForensics++ | 97.63 | Celeb-DF: 69.18 | [paper](https://arxiv.org/abs/2112.13977) |
-| **M2TR** | FaceForensics++ | 99.51 | Celeb-DF: 68.20 | [paper](https://arxiv.org/abs/2104.09770) |
-| **MPSM** | FaceForensics++ | 99.46 | DFDC: 76.53 | [paper](https://arxiv.org/abs/2105.02577) |
-| **papa et al** | 自建库 | 100(ACC) | — | [paper](https://ieeexplore.ieee.org/document/10156981/) |
-| **Liu et al** | DiffusionForensics | 100 | DiffusionDB: 73.21 | [paper](https://ieeexplore.ieee.org/document/10608232) |
-| **D4** | 自建库 | 93.00(ACC) | — | [paper](https://arxiv.org/abs/2202.05687) |
-
-**发展趋势：**空间域和频域特征的有效融合，针对不同生成模型的频域特征分析，压缩鲁棒性提升
+- **Cross-dataset accuracy**: Train on one dataset, test on another
+- **Robustness metrics**: Resistance to compression, noise, cropping, etc.
 
 ---
 
-### 视频级检测方法
+## Detection Method Taxonomy
 
-#### 基于时空不一致的检测方法
+### Image-level Detection Methods
 
-视频级检测方法利用时间信息，通过分析帧间的不一致性来识别伪造。
+#### Spatial-domain based detection methods
 
-**代表性工作：**(见论文Table 3)
+Image-domain based detection methods focus on pixel-level features, analyzing spatial distributions, textures, edges, and other spatial cues to identify forgery traces.
 
-| 方法 | 数据集 | AUC检测结果(%) | 跨数据集AUC(%) | 文章链接 |
-|------|---------|------|--------|------|
-| **Sabir et al** | FaceForensics++ | 99.60 | — | [paper](https://arxiv.org/abs/1905.00582) |
-| **FSSpotter** | FaceForensics++ | 100 | Celeb-DF: 76.26 | [paper](https://ieeexplore.ieee.org/document/9102914/) |
-| **Zheng et al** | FaceForensics++ | 99.70 | Celeb-DF: 86.90 | [paper](https://arxiv.org/abs/2108.06693) |
-| **Gu et al** | FaceForensics++ | 98.93 | Celeb-DF: 77.65 | [paper](https://ojs.aaai.org/index.php/AAAI/article/view/19955) |
-| **STDT** | FaceForensics++ | 99.80 | Celeb-DF: 69.78 | [paper](https://arxiv.org/abs/2207.06612) |
-| **TALL-Swin** | FaceForensics++ | 99.87 | Celeb-DF: 90.79 | [paper](https://arxiv.org/abs/2403.10261) |
+**Representative works:** (see Table 1 in the paper)
 
-**发展趋势：**从单帧检测到多帧时序分析，从监督学习到无监督/自监督学习，从全局时序到局部时序不一致性检测
+| Method | Dataset | AUC (Detection) (%) | Cross-dataset AUC (%) | Paper Link |
+|-------|---------|---------------------|----------------------|------------|
+| Matern et al | FaceForensics | 86.60 | — | https://ieeexplore.ieee.org/document/8638330 |
+| Zhou et al | In-house dataset | 92.70 | In-house: 85.40 | https://ieeexplore.ieee.org/document/8014963 |
+| Li and Lyu | DeepfakeTIMIT | 93.20 | — | https://arxiv.org/abs/1811.00656 |
+| Face X-ray | FaceForensics++ | 98.52 | Celeb-DF: 80.58 | https://arxiv.org/abs/1912.13458 |
+| MesoNet | FaceForensics++ | 98.40 (ACC) | — | https://arxiv.org/abs/1809.00888 |
+| RFM | Celeb-DF | 99.97 | — | https://arxiv.org/abs/2104.06609 |
+| Muti-attention | FaceForensics++ | 99.29 | Celeb-DF: 67.44 | https://arxiv.org/abs/2103.02406 |
+| Wodajo et al | DFDC | 99.90 | — | https://arxiv.org/abs/2307.07036 |
+| Heo et al | DFDC | 97.80 (ACC) | — | https://link.springer.com/article/10.1007/s10489-022-03867-9 |
+| Nguyen et al | FaceForensics++ | 99.37 | Celeb-DF: 57.50 | https://arxiv.org/abs/1810.11215 |
+| TAR | FaceForensics++ | 99.80 (ACC) | In-house: 89.50 | https://arxiv.org/abs/2105.06117 |
+| Aghasanli et al | In-house dataset | 99.70 (ACC) | In-house: 84 (ACC) | https://ieeexplore.ieee.org/document/10350382 |
+| multiLID | In-house dataset | 100 (ACC) | — | https://arxiv.org/abs/2307.02347 |
+| Cheng et al | DiFF | 99.99 (ACC) | — | https://arxiv.org/abs/2401.15859 |
+| Amoroso et al | In-house dataset | 99.68 | In-house: 99.68 | https://arxiv.org/abs/2304.00500 |
+| papa et al | In-house dataset | 100 (ACC) | — | https://ieeexplore.ieee.org/document/10156981/ |
+| Liu et al | DiffusionForensics | 100 | DiffusionDB: 73.21 | https://ieeexplore.ieee.org/document/10608232 |
+| D4 | In-house dataset | 93.00 (ACC) | — | https://arxiv.org/abs/2202.05687 |
+| Song et al | In-house dataset | 95.70 | — | https://arxiv.org/abs/2410.23623 |
 
-#### 基于生物特征的检测方法
+**Trends:** From single-feature to multi-feature fusion; from global detection to local localization; from supervised learning to self-supervised / contrastive learning.
 
-利用人脸生物特征（如眨眼、心率、血流、瞳孔反应等）来检测伪造，因为这些特征在伪造视频中往往不自然。
+### Frequency-domain based detection methods
 
-**代表性工作：**(见论文Table 4)
+Frequency-domain based detection methods detect forgery traces by analyzing frequency-domain features, since generative models leave artifacts in the frequency domain.
 
-| 方法 | 数据集 | AUC检测结果(%) | 跨数据集AUC(%) | 文章链接 |
-|------|---------|------|--------|------|
-| **Ciftci et al** | FaceForensics++ | 91.07(ACC) | Celeb-DF: 86.48(ACC) | [paper](https://arxiv.org/abs/1901.02212) |
-| **DeepFakesON-Phys** | DFDC | 98.20 | — | [paper](https://arxiv.org/abs/2010.00400) |
-| **Mao and Yang** | FaceForensics++ | 96.13(ACC) | Celeb-DF: 86.57(ACC) | [paper](https://arxiv.org/abs/2110.15561) |
-| **Saif et al** | FaceForensics++ | 99.00(AUC) | Celeb-DF: 95.00 | [paper](https://ideas.repec.org/a/eee/tefoso/v205y2024ics0040162524002671.html) |
+**Representative works:** (see Table 2 in the paper)
 
-**发展趋势：**多生物特征融合，低质量视频下的生物特征提取，实时生物特征检测
+| Method | Dataset | AUC (Detection) (%) | Cross-dataset AUC (%) | Paper Link |
+|-------|---------|---------------------|----------------------|------------|
+| Li et al | FaceForensics++ | 93.40 | Celeb-DF: 79.30 | https://arxiv.org/abs/2103.09096 |
+| Frank et al | CelebA | 99.91 (ACC) | — | https://arxiv.org/abs/2003.08685 |
+| F3-Net | FaceForensics++ | 98.10 | Celeb-DF: 65.17 | https://arxiv.org/abs/2007.09355 |
+| PEL | FaceForensics++ | 97.63 | Celeb-DF: 69.18 | https://arxiv.org/abs/2112.13977 |
+| M2TR | FaceForensics++ | 99.51 | Celeb-DF: 68.20 | https://arxiv.org/abs/2104.09770 |
+| MPSM | FaceForensics++ | 99.46 | DFDC: 76.53 | https://arxiv.org/abs/2105.02577 |
+| papa et al | In-house dataset | 100 (ACC) | — | https://ieeexplore.ieee.org/document/10156981/ |
+| Liu et al | DiffusionForensics | 100 | DiffusionDB: 73.21 | https://ieeexplore.ieee.org/document/10608232 |
+| D4 | In-house dataset | 93.00 (ACC) | — | https://arxiv.org/abs/2202.05687 |
 
-#### 基于多模态的检测方法
-
-利用音频、视频等多种模态信息（音视频同步性、唇动与音频一致性、融合多模态特征）进行联合检测，通过分析模态间的一致性来识别伪造。
-
-**代表性工作：**(见论文Table 5)
-
-| 方法 | 数据集 | AUC检测结果(%) | 跨数据集AUC(%) | 文章链接 |
-|------|---------|------|--------|------|
-| **Cai et al** | LAV-DF | 99.00 | — | [paper](https://arxiv.org/abs/2204.06228) |
-| **Shahzad et al** | FakeAVCeleb | 94.00(ACC) | — | [paper](https://ieeexplore.ieee.org/document/9980296/) |
-| **AVoiD-DF** | FakeAVCeleb | 89.20 | DFDC: 80.60 | [paper](https://ieeexplore.ieee.org/document/10081373/) |
-| **AVFF** | FakeAVCeleb | 99.10 | DFDC: 86.20 | [paper](https://arxiv.org/abs/2406.02951) |
-| **Yin et al** | FakeAVCeleb | 99.97 | LAV-DF: 63.80 | [paper](https://link.springer.com/article/10.1007/s11263-024-02128-1) |
-| **Song et al** | 自建库 | 95.70 | — | [paper](https://arxiv.org/abs/2410.23623) |
-
-**发展趋势：**跨模态特征的有效融合，对异步场景的鲁棒性提升，局部多模态伪造检测和定位，自监督多模态学习
-
----
-
-### 文本生成图像/视频检测方法
-
-随着文本生成图像/视频技术的流行（如DALL-E、Stable Diffusion、Runway等），针对这类生成内容的检测方法也逐渐发展。检测思路有：分析扩散模型生成图像的特定痕迹、检测文本生成内容的特征模式、识别生成式AI的指纹特征
-
-**代表性工作：**(混杂在上面提到的这些论文中)
-
-| 方法 | 核心思想 | 特点 |  |  |
-|------|---------|------|------|------|
-| **Aghasanli et al** | 自建库             | 99.70(ACC) | 自建库: 84(ACC)    | [paper](https://ieeexplore.ieee.org/document/10350382) |
-| **multiLID**        | 自建库             | 100(ACC)   | —                  | [paper](https://arxiv.org/abs/2307.02347) |
-| **Cheng et al**     | DiFF               | 99.99(ACC) | — | [paper](https://arxiv.org/abs/2401.15859) |
-| **Amoroso et al** | 自建库 | 99.68 | 自建库: 99.68 | [paper](https://arxiv.org/abs/2304.00500) |
-| **papa et al** | 自建库 | 100(ACC) | — | [paper](https://ieeexplore.ieee.org/document/10156981/) |
-| **Liu et al** | DiffusionForensics | 100 | DiffusionDB: 73.21 | [paper](https://ieeexplore.ieee.org/document/10608232) |
-| **D4** | 自建库 | 93.00(ACC) | — | [paper](https://arxiv.org/abs/2202.05687) |
-| **Song et al** | 自建库 | 95.70 | — | [paper](https://arxiv.org/abs/2410.23623) |
-
-**挑战：**扩散模型留下的痕迹更细微、不同生成模型的痕迹差异大、需要针对不同生成技术的专门检测方法
+**Trends:** Fusion of spatial and frequency features; domain-specific frequency analysis for different generation models; improved compression robustness.
 
 ---
 
-## 研究挑战与瓶颈
+### Video-level Detection Methods
 
-以下挑战总结自大量论文，可参考文中的引用
+#### Spatio-temporal inconsistency based detection methods
 
-1. 泛化能力不足：不同生成方法留下的痕迹差异大；模型过度拟合特定数据集的特征；缺乏通用的伪造特征表示
-2. 真实环境下的鲁棒性：伪造痕迹在压缩后可能被削弱；模型在高质量数据上训练，对低质量数据泛化差；缺乏真实场景的多样化训练数据
-3. 对抗攻击的脆弱性：检测模型本身存在脆弱性；缺乏对抗训练；检测特征容易被绕过
-4. 实时性与计算效率：复杂的特征提取和融合过程；缺乏模型压缩和优化；多模态处理需要更多计算资源
-5. 多模态融合的复杂性：不同模态的特征空间差异大；缺乏有效的跨模态对齐方法；对网络延迟、压缩等导致的异步处理不足
+Video-level detection methods leverage temporal information by analyzing frame-to-frame inconsistencies.
+
+**Representative works:** (see Table 3 in the paper)
+
+| Method | Dataset | AUC (Detection) (%) | Cross-dataset AUC (%) | Paper Link |
+|--------|---------|---------------------|----------------------|------------|
+| Sabir et al | FaceForensics++ | 99.60 | — | https://arxiv.org/abs/1905.00582 |
+| FSSpotter | FaceForensics++ | 100 | Celeb-DF: 76.26 | https://ieeexplore.ieee.org/document/9102914/ |
+| Zheng et al | FaceForensics++ | 99.70 | Celeb-DF: 86.90 | https://arxiv.org/abs/2108.06693 |
+| Gu et al | FaceForensics++ | 98.93 | Celeb-DF: 77.65 | https://ojs.aaai.org/index.php/AAAI/article/view/19955 |
+| STDT | FaceForensics++ | 99.80 | Celeb-DF: 69.78 | https://arxiv.org/abs/2207.06612 |
+| TALL-Swin | FaceForensics++ | 99.87 | Celeb-DF: 90.79 | https://arxiv.org/abs/2403.10261 |
+
+**Trends:** From single-frame detection to multi-frame temporal analysis; from supervised to unsupervised/self-supervised learning; from global temporal to local temporal inconsistency detection.
+
+#### Biometric-based detection methods
+
+Uses facial biometric features (blink rate, heart rate, blood flow, pupil response, etc.) to detect forgery, since these features are often unnatural in forged videos.
+
+**Representative works:** (see Table 4)
+
+| Method | Dataset | AUC (Detection) (%) | Cross-dataset AUC (%) | Paper Link |
+|--------|---------|---------------------|----------------------|------------|
+| Ciftci et al | FaceForensics++ | 91.07 (ACC) | Celeb-DF: 86.48 (ACC) | https://arxiv.org/abs/1901.02212 |
+| DeepFakesON-Phys | DFDC | 98.20 | — | https://arxiv.org/abs/2010.00400 |
+| Mao and Yang | FaceForensics++ | 96.13 (ACC) | Celeb-DF: 86.57 (ACC) | https://arxiv.org/abs/2110.15561 |
+| Saif et al | FaceForensics++ | 99.00 (AUC) | Celeb-DF: 95.00 | https://ideas.repec.org/a/eee/tefoso/v205y2024ics0040162524002671.html |
+
+**Trends:** Fusion of multiple biometric features; robust feature extraction on low-quality videos; real-time biometric detection.
+
+#### Multimodal-based detection methods
+
+Fuses multiple modalities (audio, video, etc.) for joint detection by analyzing cross-modal consistency (lip-sync with audio, etc.).
+
+**Representative works:** (see Table 5)
+
+| Method | Dataset | AUC (Detection) (%) | Cross-dataset AUC (%) | Paper Link |
+|--------|---------|---------------------|----------------------|------------|
+| Cai et al | LAV-DF | 99.00 | — | https://arxiv.org/abs/2204.06228 |
+| Shahzad et al | FakeAVCeleb | 94.00 (ACC) | — | https://ieeexplore.ieee.org/document/9980296/ |
+| AVoiD-DF | FakeAVCeleb | 89.20 | DFDC: 80.60 | https://ieeexplore.ieee.org/document/10081373/ |
+| AVFF | FakeAVCeleb | 99.10 | DFDC: 86.20 | https://arxiv.org/abs/2406.02951 |
+| Yin et al | FakeAVCeleb | 99.97 | LAV-DF: 63.80 | https://link.springer.com/article/10.1007/s11263-024-02128-1 |
+| Song et al | In-house dataset | 95.70 | — | https://arxiv.org/abs/2410.23623 |
+
+**Trends:** Effective fusion of cross-modal features; robustness in asynchronous scenarios; localized multimodal forgery detection and localization; self-supervised multimodal learning.
 
 ---
 
-## 未来研究方向
+### Text-to-Image/Video Generation Detection Methods
 
-以下研究方向总结自大量论文，可参考文中的引用
+With the popularity of text-to-image/video generation (e.g., DALL-E, Stable Diffusion, Runway), detection methods for such content have also evolved. Approaches include: analyzing artifacts unique to diffusion-generated images, detecting fingerprints of generative AIs, etc.
 
-1. 通用化检测方法：学习通用的伪造特征表示，提升跨数据集和跨方法的泛化能力
-2. 鲁棒性提升：空间域和频域特征的有效融合；知识蒸馏提升泛化能力；在多样化真实场景数据上训练
-3. 实时检测系统：模型压缩和量化、知识蒸馏、边缘计算部署等
-4. 多模态深度融合：跨模态对齐和正则化；对异步场景的鲁棒性；自监督多模态学习；局部多模态伪造检测和定位
-5. 对抗鲁棒性：对抗训练、可解释性分析、防御机制设计
-6. 可解释性检测：可视化伪造区域、解释检测依据、提升用户信任度
-7. 公平性和多样性：多样化的训练数据、减少对不同人群的偏差、公平性评估指标
+**Representative works:** (mixed among papers above)
+
+| Method | Core Idea | Features | | |
+|--------|-----------|---------|------|------|
+| Aghasanli et al | In-house dataset | 99.70 (ACC) | In-house: 84 (ACC) | https://ieeexplore.ieee.org/document/10350382 |
+| multiLID | In-house dataset | 100 (ACC) | — | https://arxiv.org/abs/2307.02347 |
+| Cheng et al | DiFF | 99.99 (ACC) | — | https://arxiv.org/abs/2401.15859 |
+| Amoroso et al | In-house dataset | 99.68 | In-house: 99.68 | https://arxiv.org/abs/2304.00500 |
+| papa et al | In-house dataset | 100 (ACC) | — | https://ieeexplore.ieee.org/document/10156981/ |
+| Liu et al | DiffusionForensics | 100 | DiffusionDB: 73.21 | https://ieeexplore.ieee.org/document/10608232 |
+| D4 | In-house dataset | 93.00 (ACC) | — | https://arxiv.org/abs/2202.05687 |
+| Song et al | In-house dataset | 95.70 | — | https://arxiv.org/abs/2410.23623 |
+
+**Challenges:** Traces from diffusion models are subtler; traces vary across generation models; need model-specific detection methods.
+
+---
+
+## Research Challenges and Bottlenecks
+
+The following challenges summarize a large body of work, please check the specific citations in my paper
+
+1. Generalization gap: traces differ across generation methods; models overfit dataset-specific features; lack universal forged-feature representations
+2. Robustness in real-world conditions: forged traces may be weakened by compression; models trained on high-quality data do not generalize well to low-quality data; lack of diverse training data in real-world scenarios
+3. Vulnerability to adversarial attacks: detectors themselves can be vulnerable; lack of adversarial training; detection features easily circumvented
+4. Real-time and computational efficiency: heavy feature extraction and fusion pipelines; lack of model compression and optimization; multimodal processing requires more compute
+5. Multimodal fusion complexity: large differences between modality feature spaces; lack of effective cross-modal alignment; asynchronous processing due to network delays or compression
+
+---
+
+## Future Research Directions
+
+The following directions summarize insights from extensive literature, please check the specific citations in my paper
+
+1. Generalized detection methods: learn universal forgery representations to improve cross-dataset and cross-method generalization
+2. Robustness enhancement: effective fusion of spatial and frequency features; knowledge distillation to boost generalization; training on diverse real-world data
+3. Real-time detection systems: model compression and quantization; knowledge distillation; edge deployment
+4. Multimodal deep fusion: cross-modal alignment and regularization; robustness to asynchronous scenarios; self-supervised multimodal learning; localized multimodal forgery detection and localization
+5. Adversarial robustness: adversarial training, interpretability analyses, defense mechanisms
+6. Explainable detection: visualize forged regions, explain detection rationale, build user trust
+7. Fairness and diversity: diverse training data; reduce bias across different populations; fairness metrics
 
 ---
 
