@@ -1,6 +1,6 @@
 # Deepfake Detection Review
 
-[Chinese Version](README_CN)
+[Chinese Version](README_CN.md)
 
 > This document is organized based on our survey paper "Review of research on face deepfake detection methods" (https://www.cjig.cn/zh/article/doi/10.11834/jig.240586/).
 > 
@@ -20,21 +20,26 @@
 
 ![deepfake](assets/deepfake.jpeg)
 
+*Falsehood may prevail for a moment, but truth will be proven by time.*
+
 ## 📚 Table of Contents
 
 - [Datasets](#datasets)
 - [Evaluation Metrics](#evaluation-metrics)
 - [Detection Method Taxonomy](#detection-method-taxonomy)
--   - [Image-level Detection Methods](#image-level-detection-methods)
--     - [Spatial-domain based detection methods](#spatial-domain-based-detection-methods)
--     - [Frequency-domain based detection methods](#frequency-domain-based-detection-methods)
--   - [Video-level Detection Methods](#video-level-detection-methods)
--     - [Spatio-temporal inconsistency based detection methods](#spatio-temporal-inconsistency-based-detection-methods)
--     - [Biometric-based detection methods](#biometric-based-detection-methods)
--     - [Multimodal-based detection methods](#multimodal-based-detection-methods)
--   - [Text-to-Image/Video Generation Detection Methods](#text-to-imagevideo-generation-detection-methods)
-- - [Research Challenges and Bottlenecks](#research-challenges-and-bottlenecks)
-- - [Future Research Directions](#future-research-directions)
+  - [Image-level Detection Methods](#image-level-detection-methods)
+    - [Spatial-domain based detection methods](#spatial-domain-based-detection-methods)
+    - [Frequency-domain based detection methods](#frequency-domain-based-detection-methods)
+
+  - [Video-level Detection Methods](#video-level-detection-methods)
+    - [Spatio-temporal inconsistency based detection methods](#spatio-temporal-inconsistency-based-detection-methods)
+    - [Biometric-based detection methods](#biometric-based-detection-methods)
+    - [Multimodal-based detection methods](#multimodal-based-detection-methods)
+
+  - [Text-to-Image/Video Generation Detection Methods](#text-to-imagevideo-generation-detection-methods)
+
+- [Research Challenges and Bottlenecks](#research-challenges-and-bottlenecks)
+- [Future Research Directions](#future-research-directions)
 
 ---
 
@@ -42,25 +47,25 @@
 
 | Dataset Name | Year | Description | Size | Features |
 |-------------|------|-------------|------|---------|
-| **Celeb-DF** (https://github.com/yuezunli/celeb-deepfakeforensics) | 2019 | High-quality face-swapping dataset | 590 real videos, 5,639 forged videos | High-quality forgeries; difficult to detect, collected from YouTube celebrity videos |
-| **FaceForensics++** (https://github.com/ondyari/FaceForensics) | 2019 | Dataset with multiple forgery methods | 1,000 real videos, ~5,000 forged videos | Includes multiple forgery techniques (DeepFakes, Face2Face, FaceSwap, NeuralTextures, etc.); multiple compression quality versions |
-| **WildDeepfake** (https://github.com/OpenTAI/wild-deepfake) | 2021 | Real-world like dataset | 707 videos, 7,314 face sequences | Collected from the internet; closer to real-world applications; high scene and person diversity |
+| **[Celeb-DF](https://github.com/yuezunli/celeb-deepfakeforensics)** | 2019 | High-quality face-swapping dataset | 590 real videos, 5,639 forged videos | High-quality forgeries; difficult to detect, collected from YouTube celebrity videos |
+| **[FaceForensics++](https://github.com/ondyari/FaceForensics)** | 2019 | Dataset with multiple forgery methods | 1,000 real videos, ~5,000 forged videos | Includes multiple forgery techniques (DeepFakes, Face2Face, FaceSwap, NeuralTextures, etc.); multiple compression quality versions |
+| **[WildDeepfake](https://github.com/OpenTAI/wild-deepfake)** | 2021 | Real-world like dataset | 707 videos, 7,314 face sequences | Collected from the internet; closer to real-world applications; high scene and person diversity |
 
 | Dataset Name | Year | Description | Size | Features |
 |-------------|------|-------------|------|---------|
-| **DFDC (Deepfake Detection Challenge)** (https://ai.facebook.com/datasets/dfdc) | 2020 | Large-scale dataset released by Facebook | ~23,564 real video clips, 104,500 forged video clips | Contains multiple forgery methods and real scenes; shot by 3,426 actors; total video clips > 100k |
+| **[DFDC](https://ai.facebook.com/datasets/dfdc)** | 2020 | Large-scale dataset released by Facebook | ~23,564 real video clips, 104,500 forged video clips | Contains multiple forgery methods and real scenes; shot by 3,426 actors; total video clips > 100k |
 | **DeeperForensics-1.0** (https://github.com/EndlessSora/DeeperForensics-1.0) | 2020 | Large-scale real-world face forgery detection benchmark | 48,475 real videos, 11,000 forged videos, total ~60,000 videos, ~17.6 million frames | Includes real perturbations, face-swapping methods; includes hidden test set |
-| **FakeAVCeleb** (https://github.com/DashyantSingh/FakeAVCeleb) | 2021 | Audio-visual deepfake dataset | 500 real videos, 19,500 forged video/audio-video pairs | Includes audio and video forgery; supports multimodal detection; audio-video synchronization analysis |
-| **AV-Deepfake1M** (https://arxiv.org/abs/2311.15308) | 2023 | Large-scale audio-video dataset | 286,721 real videos, 860,039 forged videos | Large-scale, diverse; supports audio-video joint detection; total samples > 1M |
-| **LAV-DF** (https://github.com/ControlNet/LAV-DF) | 2023 | Localized audio-video forgery dataset | - | Supports localized forgery detection and localization; fine-grained multimodal classification |
+| **[FakeAVCeleb](https://github.com/DashyantSingh/FakeAVCeleb)** | 2021 | Audio-visual deepfake dataset | 500 real videos, 19,500 forged video/audio-video pairs | Includes audio and video forgery; supports multimodal detection; audio-video synchronization analysis |
+| **[AV-Deepfake1M](https://arxiv.org/abs/2311.15308)** | 2023 | Large-scale audio-video dataset | 286,721 real videos, 860,039 forged videos | Large-scale, diverse; supports audio-video joint detection; total samples > 1M |
+| **[LAV-DF](https://github.com/ControlNet/LAV-DF)** | 2023 | Localized audio-video forgery dataset | - | Supports localized forgery detection and localization; fine-grained multimodal classification |
 
 ### Text-to-Image/Video Datasets
 
 | Dataset Name | Year | Description | Size | Features |
 |-------------|------|-------------|------|---------|
-| **DiffusionDB** (https://github.com/poloclub/diffusiondb) | 2022 | Large-scale text-to-image generation dataset | ~14,000,000 generated images (no real images) | Generated by Stable Diffusion; ~1.8 million prompts and hyperparameters; for text-to-image generation research |
-| **DiffusionForensics (DIRE)** (https://github.com/ZhendongWang6/DIRE) | 2023 | Diffusion-model generated image detection dataset | ~40,000 real images, ~40,000 generated images | Covers multiple domains (LSUN-Bedroom, ImageNet, CelebA-HQ, etc.); includes images generated by various diffusion models; for general AI-generated image detection |
-| **DiFF** (https://github.com/xaCheng1996/DiFF) | 2024 | Diffusion-model face forgery dataset | >500,000 generated images, includes real face images | Uses 13 generation methods under 4 conditions; ~30,000 prompts; focuses on face forgery detection |
+| **[DiffusionDB](https://github.com/poloclub/diffusiondb)** | 2022 | Large-scale text-to-image generation dataset | ~14,000,000 generated images (no real images) | Generated by Stable Diffusion; ~1.8 million prompts and hyperparameters; for text-to-image generation research |
+| **[DiffusionForensics](https://github.com/ZhendongWang6/DIRE)** | 2023 | Diffusion-model generated image detection dataset | ~40,000 real images, ~40,000 generated images | Covers multiple domains (LSUN-Bedroom, ImageNet, CelebA-HQ, etc.); includes images generated by various diffusion models; for general AI-generated image detection |
+| **[DiFF](https://github.com/xaCheng1996/DiFF)** | 2024 | Diffusion-model face forgery dataset | >500,000 generated images, includes real face images | Uses 13 generation methods under 4 conditions; ~30,000 prompts; focuses on face forgery detection |
 
 ---
 
@@ -98,25 +103,25 @@ Image-domain based detection methods focus on pixel-level features, analyzing sp
 
 | Method | Dataset | AUC (Detection) (%) | Cross-dataset AUC (%) | Paper Link |
 |-------|---------|---------------------|----------------------|------------|
-| Matern et al | FaceForensics | 86.60 | — | https://ieeexplore.ieee.org/document/8638330 |
-| Zhou et al | In-house dataset | 92.70 | In-house: 85.40 | https://ieeexplore.ieee.org/document/8014963 |
-| Li and Lyu | DeepfakeTIMIT | 93.20 | — | https://arxiv.org/abs/1811.00656 |
-| Face X-ray | FaceForensics++ | 98.52 | Celeb-DF: 80.58 | https://arxiv.org/abs/1912.13458 |
-| MesoNet | FaceForensics++ | 98.40 (ACC) | — | https://arxiv.org/abs/1809.00888 |
-| RFM | Celeb-DF | 99.97 | — | https://arxiv.org/abs/2104.06609 |
-| Muti-attention | FaceForensics++ | 99.29 | Celeb-DF: 67.44 | https://arxiv.org/abs/2103.02406 |
-| Wodajo et al | DFDC | 99.90 | — | https://arxiv.org/abs/2307.07036 |
-| Heo et al | DFDC | 97.80 (ACC) | — | https://link.springer.com/article/10.1007/s10489-022-03867-9 |
-| Nguyen et al | FaceForensics++ | 99.37 | Celeb-DF: 57.50 | https://arxiv.org/abs/1810.11215 |
-| TAR | FaceForensics++ | 99.80 (ACC) | In-house: 89.50 | https://arxiv.org/abs/2105.06117 |
-| Aghasanli et al | In-house dataset | 99.70 (ACC) | In-house: 84 (ACC) | https://ieeexplore.ieee.org/document/10350382 |
-| multiLID | In-house dataset | 100 (ACC) | — | https://arxiv.org/abs/2307.02347 |
-| Cheng et al | DiFF | 99.99 (ACC) | — | https://arxiv.org/abs/2401.15859 |
-| Amoroso et al | In-house dataset | 99.68 | In-house: 99.68 | https://arxiv.org/abs/2304.00500 |
-| papa et al | In-house dataset | 100 (ACC) | — | https://ieeexplore.ieee.org/document/10156981/ |
-| Liu et al | DiffusionForensics | 100 | DiffusionDB: 73.21 | https://ieeexplore.ieee.org/document/10608232 |
-| D4 | In-house dataset | 93.00 (ACC) | — | https://arxiv.org/abs/2202.05687 |
-| Song et al | In-house dataset | 95.70 | — | https://arxiv.org/abs/2410.23623 |
+| Matern et al | FaceForensics | 86.60 | — | [paper](https://ieeexplore.ieee.org/document/8638330) |
+| Zhou et al | In-house dataset | 92.70 | In-house: 85.40 | [paper](https://ieeexplore.ieee.org/document/8014963) |
+| Li and Lyu | DeepfakeTIMIT | 93.20 | — | [paper](https://arxiv.org/abs/1811.00656) |
+| Face X-ray | FaceForensics++ | 98.52 | Celeb-DF: 80.58 | [paper](https://arxiv.org/abs/1912.13458) |
+| MesoNet | FaceForensics++ | 98.40 (ACC) | — | [paper](https://arxiv.org/abs/1809.00888) |
+| RFM | Celeb-DF | 99.97 | — | [paper](https://arxiv.org/abs/2104.06609) |
+| Muti-attention | FaceForensics++ | 99.29 | Celeb-DF: 67.44 | [paper](https://arxiv.org/abs/2103.02406) |
+| Wodajo et al | DFDC | 99.90 | — | [paper](https://arxiv.org/abs/2307.07036) |
+| Heo et al | DFDC | 97.80 (ACC) | — | [paper](https://link.springer.com/article/10.1007/s10489-022-03867-9) |
+| Nguyen et al | FaceForensics++ | 99.37 | Celeb-DF: 57.50 | [paper](https://arxiv.org/abs/1810.11215) |
+| TAR | FaceForensics++ | 99.80 (ACC) | In-house: 89.50 | [paper](https://arxiv.org/abs/2105.06117) |
+| Aghasanli et al | In-house dataset | 99.70 (ACC) | In-house: 84 (ACC) | [paper](https://ieeexplore.ieee.org/document/10350382) |
+| multiLID | In-house dataset | 100 (ACC) | — | [paper](https://arxiv.org/abs/2307.02347) |
+| Cheng et al | DiFF | 99.99 (ACC) | — | [paper](https://arxiv.org/abs/2401.15859) |
+| Amoroso et al | In-house dataset | 99.68 | In-house: 99.68 | [paper](https://arxiv.org/abs/2304.00500) |
+| papa et al | In-house dataset | 100 (ACC) | — | [paper](https://ieeexplore.ieee.org/document/10156981/) |
+| Liu et al | DiffusionForensics | 100 | DiffusionDB: 73.21 | [paper](https://ieeexplore.ieee.org/document/10608232) |
+| D4 | In-house dataset | 93.00 (ACC) | — | [paper](https://arxiv.org/abs/2202.05687) |
+| Song et al | In-house dataset | 95.70 | — | [paper](https://arxiv.org/abs/2410.23623) |
 
 **Trends:** From single-feature to multi-feature fusion; from global detection to local localization; from supervised learning to self-supervised / contrastive learning.
 
@@ -128,15 +133,15 @@ Frequency-domain based detection methods detect forgery traces by analyzing freq
 
 | Method | Dataset | AUC (Detection) (%) | Cross-dataset AUC (%) | Paper Link |
 |-------|---------|---------------------|----------------------|------------|
-| Li et al | FaceForensics++ | 93.40 | Celeb-DF: 79.30 | https://arxiv.org/abs/2103.09096 |
-| Frank et al | CelebA | 99.91 (ACC) | — | https://arxiv.org/abs/2003.08685 |
-| F3-Net | FaceForensics++ | 98.10 | Celeb-DF: 65.17 | https://arxiv.org/abs/2007.09355 |
-| PEL | FaceForensics++ | 97.63 | Celeb-DF: 69.18 | https://arxiv.org/abs/2112.13977 |
-| M2TR | FaceForensics++ | 99.51 | Celeb-DF: 68.20 | https://arxiv.org/abs/2104.09770 |
-| MPSM | FaceForensics++ | 99.46 | DFDC: 76.53 | https://arxiv.org/abs/2105.02577 |
-| papa et al | In-house dataset | 100 (ACC) | — | https://ieeexplore.ieee.org/document/10156981/ |
-| Liu et al | DiffusionForensics | 100 | DiffusionDB: 73.21 | https://ieeexplore.ieee.org/document/10608232 |
-| D4 | In-house dataset | 93.00 (ACC) | — | https://arxiv.org/abs/2202.05687 |
+| Li et al | FaceForensics++ | 93.40 | Celeb-DF: 79.30 | [paper](https://arxiv.org/abs/2103.09096) |
+| Frank et al | CelebA | 99.91 (ACC) | — | [paper](https://arxiv.org/abs/2003.08685) |
+| F3-Net | FaceForensics++ | 98.10 | Celeb-DF: 65.17 | [paper](https://arxiv.org/abs/2007.09355) |
+| PEL | FaceForensics++ | 97.63 | Celeb-DF: 69.18 | [paper](https://arxiv.org/abs/2112.13977) |
+| M2TR | FaceForensics++ | 99.51 | Celeb-DF: 68.20 | [paper](https://arxiv.org/abs/2104.09770) |
+| MPSM | FaceForensics++ | 99.46 | DFDC: 76.53 | [paper](https://arxiv.org/abs/2105.02577) |
+| papa et al | In-house dataset | 100 (ACC) | — | [paper](https://ieeexplore.ieee.org/document/10156981/) |
+| Liu et al | DiffusionForensics | 100 | DiffusionDB: 73.21 | [paper](https://ieeexplore.ieee.org/document/10608232) |
+| D4 | In-house dataset | 93.00 (ACC) | — | [paper](https://arxiv.org/abs/2202.05687) |
 
 **Trends:** Fusion of spatial and frequency features; domain-specific frequency analysis for different generation models; improved compression robustness.
 
@@ -152,12 +157,12 @@ Video-level detection methods leverage temporal information by analyzing frame-t
 
 | Method | Dataset | AUC (Detection) (%) | Cross-dataset AUC (%) | Paper Link |
 |--------|---------|---------------------|----------------------|------------|
-| Sabir et al | FaceForensics++ | 99.60 | — | https://arxiv.org/abs/1905.00582 |
-| FSSpotter | FaceForensics++ | 100 | Celeb-DF: 76.26 | https://ieeexplore.ieee.org/document/9102914/ |
-| Zheng et al | FaceForensics++ | 99.70 | Celeb-DF: 86.90 | https://arxiv.org/abs/2108.06693 |
-| Gu et al | FaceForensics++ | 98.93 | Celeb-DF: 77.65 | https://ojs.aaai.org/index.php/AAAI/article/view/19955 |
-| STDT | FaceForensics++ | 99.80 | Celeb-DF: 69.78 | https://arxiv.org/abs/2207.06612 |
-| TALL-Swin | FaceForensics++ | 99.87 | Celeb-DF: 90.79 | https://arxiv.org/abs/2403.10261 |
+| Sabir et al | FaceForensics++ | 99.60 | — | [paper](https://arxiv.org/abs/1905.00582) |
+| FSSpotter | FaceForensics++ | 100 | Celeb-DF: 76.26 | [paper](https://ieeexplore.ieee.org/document/9102914/) |
+| Zheng et al | FaceForensics++ | 99.70 | Celeb-DF: 86.90 | [paper](https://arxiv.org/abs/2108.06693) |
+| Gu et al | FaceForensics++ | 98.93 | Celeb-DF: 77.65 | [paper](https://ojs.aaai.org/index.php/AAAI/article/view/19955) |
+| STDT | FaceForensics++ | 99.80 | Celeb-DF: 69.78 | [paper](https://arxiv.org/abs/2207.06612) |
+| TALL-Swin | FaceForensics++ | 99.87 | Celeb-DF: 90.79 | [paper](https://arxiv.org/abs/2403.10261) |
 
 **Trends:** From single-frame detection to multi-frame temporal analysis; from supervised to unsupervised/self-supervised learning; from global temporal to local temporal inconsistency detection.
 
@@ -169,10 +174,10 @@ Uses facial biometric features (blink rate, heart rate, blood flow, pupil respon
 
 | Method | Dataset | AUC (Detection) (%) | Cross-dataset AUC (%) | Paper Link |
 |--------|---------|---------------------|----------------------|------------|
-| Ciftci et al | FaceForensics++ | 91.07 (ACC) | Celeb-DF: 86.48 (ACC) | https://arxiv.org/abs/1901.02212 |
-| DeepFakesON-Phys | DFDC | 98.20 | — | https://arxiv.org/abs/2010.00400 |
-| Mao and Yang | FaceForensics++ | 96.13 (ACC) | Celeb-DF: 86.57 (ACC) | https://arxiv.org/abs/2110.15561 |
-| Saif et al | FaceForensics++ | 99.00 (AUC) | Celeb-DF: 95.00 | https://ideas.repec.org/a/eee/tefoso/v205y2024ics0040162524002671.html |
+| Ciftci et al | FaceForensics++ | 91.07 (ACC) | Celeb-DF: 86.48 (ACC) | [paper](https://arxiv.org/abs/1901.02212) |
+| DeepFakesON-Phys | DFDC | 98.20 | — | [paper](https://arxiv.org/abs/2010.00400) |
+| Mao and Yang | FaceForensics++ | 96.13 (ACC) | Celeb-DF: 86.57 (ACC) | [paper](https://arxiv.org/abs/2110.15561) |
+| Saif et al | FaceForensics++ | 99.00 (AUC) | Celeb-DF: 95.00 | [paper](https://ideas.repec.org/a/eee/tefoso/v205y2024ics0040162524002671.html) |
 
 **Trends:** Fusion of multiple biometric features; robust feature extraction on low-quality videos; real-time biometric detection.
 
@@ -184,12 +189,12 @@ Fuses multiple modalities (audio, video, etc.) for joint detection by analyzing 
 
 | Method | Dataset | AUC (Detection) (%) | Cross-dataset AUC (%) | Paper Link |
 |--------|---------|---------------------|----------------------|------------|
-| Cai et al | LAV-DF | 99.00 | — | https://arxiv.org/abs/2204.06228 |
-| Shahzad et al | FakeAVCeleb | 94.00 (ACC) | — | https://ieeexplore.ieee.org/document/9980296/ |
-| AVoiD-DF | FakeAVCeleb | 89.20 | DFDC: 80.60 | https://ieeexplore.ieee.org/document/10081373/ |
-| AVFF | FakeAVCeleb | 99.10 | DFDC: 86.20 | https://arxiv.org/abs/2406.02951 |
-| Yin et al | FakeAVCeleb | 99.97 | LAV-DF: 63.80 | https://link.springer.com/article/10.1007/s11263-024-02128-1 |
-| Song et al | In-house dataset | 95.70 | — | https://arxiv.org/abs/2410.23623 |
+| Cai et al | LAV-DF | 99.00 | — | [paper](https://arxiv.org/abs/2204.06228) |
+| Shahzad et al | FakeAVCeleb | 94.00 (ACC) | — | [paper](https://ieeexplore.ieee.org/document/9980296/) |
+| AVoiD-DF | FakeAVCeleb | 89.20 | DFDC: 80.60 | [paper](https://ieeexplore.ieee.org/document/10081373/) |
+| AVFF | FakeAVCeleb | 99.10 | DFDC: 86.20 | [paper](https://arxiv.org/abs/2406.02951) |
+| Yin et al | FakeAVCeleb | 99.97 | LAV-DF: 63.80 | [paper](https://link.springer.com/article/10.1007/s11263-024-02128-1) |
+| Song et al | In-house dataset | 95.70 | — | [paper](https://arxiv.org/abs/2410.23623) |
 
 **Trends:** Effective fusion of cross-modal features; robustness in asynchronous scenarios; localized multimodal forgery detection and localization; self-supervised multimodal learning.
 
@@ -203,14 +208,14 @@ With the popularity of text-to-image/video generation (e.g., DALL-E, Stable Diff
 
 | Method | Core Idea | Features | | |
 |--------|-----------|---------|------|------|
-| Aghasanli et al | In-house dataset | 99.70 (ACC) | In-house: 84 (ACC) | https://ieeexplore.ieee.org/document/10350382 |
-| multiLID | In-house dataset | 100 (ACC) | — | https://arxiv.org/abs/2307.02347 |
-| Cheng et al | DiFF | 99.99 (ACC) | — | https://arxiv.org/abs/2401.15859 |
-| Amoroso et al | In-house dataset | 99.68 | In-house: 99.68 | https://arxiv.org/abs/2304.00500 |
-| papa et al | In-house dataset | 100 (ACC) | — | https://ieeexplore.ieee.org/document/10156981/ |
-| Liu et al | DiffusionForensics | 100 | DiffusionDB: 73.21 | https://ieeexplore.ieee.org/document/10608232 |
-| D4 | In-house dataset | 93.00 (ACC) | — | https://arxiv.org/abs/2202.05687 |
-| Song et al | In-house dataset | 95.70 | — | https://arxiv.org/abs/2410.23623 |
+| Aghasanli et al | In-house dataset | 99.70 (ACC) | In-house: 84 (ACC) | [paper](https://ieeexplore.ieee.org/document/10350382) |
+| multiLID | In-house dataset | 100 (ACC) | — | [paper](https://arxiv.org/abs/2307.02347) |
+| Cheng et al | DiFF | 99.99 (ACC) | — | [paper](https://arxiv.org/abs/2401.15859) |
+| Amoroso et al | In-house dataset | 99.68 | In-house: 99.68 | [paper](https://arxiv.org/abs/2304.00500) |
+| papa et al | In-house dataset | 100 (ACC) | — | [paper](https://ieeexplore.ieee.org/document/10156981/) |
+| Liu et al | DiffusionForensics | 100 | DiffusionDB: 73.21 | [paper](https://ieeexplore.ieee.org/document/10608232) |
+| D4 | In-house dataset | 93.00 (ACC) | — | [paper](https://arxiv.org/abs/2202.05687) |
+| Song et al | In-house dataset | 95.70 | — | [paper](https://arxiv.org/abs/2410.23623) |
 
 **Challenges:** Traces from diffusion models are subtler; traces vary across generation models; need model-specific detection methods.
 
