@@ -54,7 +54,7 @@
 | Dataset Name | Year | Description | Size | Features |
 |-------------|------|-------------|------|---------|
 | **[DFDC](https://ai.facebook.com/datasets/dfdc)** | 2020 | Large-scale dataset released by Facebook | ~23,564 real video clips, 104,500 forged video clips | Contains multiple forgery methods and real scenes; shot by 3,426 actors; total video clips > 100k |
-| **DeeperForensics-1.0** (https://github.com/EndlessSora/DeeperForensics-1.0) | 2020 | Large-scale real-world face forgery detection benchmark | 48,475 real videos, 11,000 forged videos, total ~60,000 videos, ~17.6 million frames | Includes real perturbations, face-swapping methods; includes hidden test set |
+| **[DeeperForensics-1.0](https://github.com/EndlessSora/DeeperForensics-1.0)** | 2020 | Large-scale real-world face forgery detection benchmark | 48,475 real videos, 11,000 forged videos, total ~60,000 videos, ~17.6 million frames | Includes real perturbations, face-swapping methods; includes hidden test set |
 | **[FakeAVCeleb](https://github.com/DashyantSingh/FakeAVCeleb)** | 2021 | Audio-visual deepfake dataset | 500 real videos, 19,500 forged video/audio-video pairs | Includes audio and video forgery; supports multimodal detection; audio-video synchronization analysis |
 | **[AV-Deepfake1M](https://arxiv.org/abs/2311.15308)** | 2023 | Large-scale audio-video dataset | 286,721 real videos, 860,039 forged videos | Large-scale, diverse; supports audio-video joint detection; total samples > 1M |
 | **[LAV-DF](https://github.com/ControlNet/LAV-DF)** | 2023 | Localized audio-video forgery dataset | - | Supports localized forgery detection and localization; fine-grained multimodal classification |
