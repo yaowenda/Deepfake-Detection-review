@@ -20,8 +20,6 @@
 
 ![deepfake](assets/deepfake.jpeg)
 
-*Falsehood may prevail for a moment, but truth will be proven by time.*
-
 ## 📚 Table of Contents
 
 - [Datasets](#datasets)

@@ -17,8 +17,6 @@
 
 ![deepfake](assets/deepfake-1768741063136-2.jpeg)
 
-*Falsehood may prevail for a moment, but truth will be proven by time.*
-
 ## 📚 目录
 
 - [数据集](#数据集)
